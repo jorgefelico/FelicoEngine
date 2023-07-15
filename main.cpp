@@ -3,7 +3,7 @@
 
 int main() {
 	std::cout << "Hello, world!" << std::endl;
-	FelicoEngine::Engine *engine = new FelicoEngine::Engine();
+	FelicoEngine::Engine *engine = new FelicoEngine::Engine("My Title",800,600);
 	
 
 	return engine->OnExecute();

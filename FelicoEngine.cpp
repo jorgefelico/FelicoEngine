@@ -2,10 +2,13 @@
 
 namespace FelicoEngine {
 
-    Engine::Engine() {
+    Engine::Engine(std::string title, int width, int height) {
         isRunning = true;
         pWindow = NULL;
         pRenderer = NULL;
+        mWidth = width;
+        mHeight = height;
+        mTitle = title;
     }
 
     bool Engine::OnInit() {
@@ -13,7 +16,7 @@ namespace FelicoEngine {
             return false;
         }
 
-        pWindow = SDL_CreateWindow("Test", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,800,800,SDL_WINDOW_SHOWN);
+        pWindow = SDL_CreateWindow(mTitle.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,mWidth,mHeight,SDL_WINDOW_SHOWN);
         if(pWindow != NULL) {
             pRenderer = SDL_CreateRenderer(pWindow,-1,0);
         } else {
