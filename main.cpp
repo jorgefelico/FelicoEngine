@@ -1,12 +1,71 @@
-#include <iostream>
-#include "FelicoEngine.h"
+#include <GLFW/glfw3.h>
+#include <stdlib.h>
+#include <stdio.h>
+ 
 
-int main() {
-	std::cout << "Hello, world!" << std::endl;
-	FelicoEngine::Engine *engine = new FelicoEngine::Engine("My Title",800,600);
-	
-
-	return engine->OnExecute();
-
-	
+static void error_callback(int error, const char* description)
+{
+    fprintf(stderr, "Error: %s\n", description);
 }
+ 
+static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, GLFW_TRUE);
+}
+ 
+int main(void)
+{
+    GLFWwindow* window;
+    GLuint vertex_buffer, vertex_shader, fragment_shader, program;
+    GLint mvp_location, vpos_location, vcol_location;
+ 
+    glfwSetErrorCallback(error_callback);
+ 
+    if (!glfwInit())
+        exit(EXIT_FAILURE);
+ 
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+ 
+    window = glfwCreateWindow(640, 480, "Simple example", NULL, NULL);
+    if (!window)
+    {
+        glfwTerminate();
+        exit(EXIT_FAILURE);
+    }
+ 
+    glfwSetKeyCallback(window, key_callback);
+ 
+    glfwMakeContextCurrent(window);
+    glfwSwapInterval(1);
+ 
+    while (!glfwWindowShouldClose(window))
+    {
+        float ratio;
+        int width, height;
+        glfwGetFramebufferSize(window, &width, &height);
+        ratio = width / (float) height;
+ 
+        glViewport(0, 0, width, height);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+		glBegin(GL_TRIANGLES);
+		glVertex2f(-0.5f,-0.5f);
+		glVertex2f(0,0.5f);
+		glVertex2f(0.5f,-0.5f);
+
+		glEnd();
+
+
+
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+    }
+ 
+    glfwDestroyWindow(window);
+ 
+    glfwTerminate();
+    exit(EXIT_SUCCESS);
+}
+ 
