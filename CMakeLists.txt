@@ -45,10 +45,15 @@ add_executable(${PROJECT_NAME}
     src/Shader.cpp
     src/Mesh.cpp
     src/Utils.cpp
-    vendor/glad/src/glad.c)
+    src/Texture.cpp
+    vendor/glad/src/glad.c
+    vendor/stb/stb_image.h
+  )
+    
 target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/glad/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/stb 
 )
 
 # Link SDL2 and OpenGL

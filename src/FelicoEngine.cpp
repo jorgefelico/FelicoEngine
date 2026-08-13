@@ -1,6 +1,7 @@
 #include "FelicoEngine.h"
 #include "Mesh.h"
 #include "Shader.h"
+#include "Texture.h"
 #include "glad/glad.h"
 
 namespace FelicoEngine {
@@ -42,10 +43,19 @@ void FelicoEngine::run() {
   bool shouldClose = false;
 
   Shader shader("src/shaders/vert.glsl", "src/shaders/frag.glsl");
-  float vertices[] = {0.0f, 0.5f, 1.0f, 0.0f,  0.0f, -0.5f, -0.5f, 0.0f,
-                      1.0f, 0.0f, 0.5f, -0.5f, 0.0f, 0.0f,  1.0f};
-  Mesh mesh(vertices, sizeof(vertices) / sizeof(vertices[0]));
+  float quad[] = {
+      // pos       color           UV
+      -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, // bottom-left
+      0.5f,  -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, // bottom-right
+      0.5f,  0.5f,  1.0f, 1.0f, 1.0f, 1.0f, 1.0f, // top-right
+      -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, // bottom-left (tri 2)
+      0.5f,  0.5f,  1.0f, 1.0f, 1.0f, 1.0f, 1.0f, // top-right
+      -0.5f, 0.5f,  1.0f, 1.0f, 1.0f, 0.0f, 1.0f  // top-left
 
+  };
+  Mesh mesh(quad, sizeof(quad) / sizeof(quad[0]));
+  Texture texture("src/textures/texture_01.png");
+  texture.bind(0);
   while (!shouldClose) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
