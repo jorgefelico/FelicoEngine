@@ -47,7 +47,6 @@ add_executable(${PROJECT_NAME}
     src/Utils.cpp
     src/Texture.cpp
     vendor/glad/src/glad.c
-    vendor/stb/stb_image.h
   )
     
 target_include_directories(${PROJECT_NAME} PRIVATE
