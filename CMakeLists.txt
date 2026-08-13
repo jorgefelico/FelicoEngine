@@ -18,6 +18,7 @@ include(FetchContent)
 set(SDL_TEST OFF CACHE BOOL "" FORCE)
 set(SDL_STATIC ON CACHE BOOL "" FORCE)      # Statically link to avoid managing DLLs
 set(SDL_SHARED OFF CACHE BOOL "" FORCE)
+set(SDL_PIPEWIRE OFF CACHE BOOL "" FORCE)   # Broken on newer PipeWire headers
 
 FetchContent_Declare(
     SDL2
@@ -42,8 +43,9 @@ add_executable(${PROJECT_NAME}
     src/main.cpp
     src/FelicoEngine.cpp
     src/Shader.cpp
+    src/Mesh.cpp
     src/Utils.cpp
-    vendor/glad/src/glad.c "src/Utils.cpp" "src/Utils.h")
+    vendor/glad/src/glad.c)
 target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/glad/include
