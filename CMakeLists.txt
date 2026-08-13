@@ -53,6 +53,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/glad/include
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/stb 
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/glm 
 )
 
 # Link SDL2 and OpenGL
