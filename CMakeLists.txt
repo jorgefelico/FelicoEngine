@@ -40,10 +40,13 @@ find_package(OpenGL REQUIRED)
 
 add_executable(${PROJECT_NAME}
     src/main.cpp
-)
-
+    src/FelicoEngine.cpp
+    src/Shader.cpp
+    src/Utils.cpp
+    vendor/glad/src/glad.c "src/Utils.cpp" "src/Utils.h")
 target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/glad/include
 )
 
 # Link SDL2 and OpenGL

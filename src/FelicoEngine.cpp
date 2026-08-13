@@ -1,0 +1,5 @@
+namespace FelicoEngine {
+	class FelicoEngine {
+		
+	};
+}
