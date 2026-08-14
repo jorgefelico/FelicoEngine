@@ -46,6 +46,7 @@ add_executable(${PROJECT_NAME}
     src/Mesh.cpp
     src/Utils.cpp
     src/Texture.cpp
+    src/Camera.cpp
     vendor/glad/src/glad.c
   )
     
