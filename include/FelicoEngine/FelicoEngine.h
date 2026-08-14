@@ -6,11 +6,16 @@
 namespace FelicoEngine {
 class FelicoEngine {
 public:
-  FelicoEngine(const char *title, int width, int height);
+  FelicoEngine(const char *title);
   ~FelicoEngine();
   void init();
-  void run();
   void shutdown();
+  int getWidth() const;
+  int getHeight() const;
+  void pollEvents();
+  void beginFrame();
+  void endFrame();
+  bool shouldClose() const;
 
 private:
   int m_Width;
@@ -18,5 +23,6 @@ private:
   std::string m_Title;
   SDL_Window *m_Window;
   SDL_GLContext m_Context;
+  bool m_ShouldClose = false;
 };
 } // namespace FelicoEngine

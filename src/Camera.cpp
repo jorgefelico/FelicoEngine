@@ -1,4 +1,4 @@
-#include "Camera.h"
+#include <FelicoEngine/Camera.h>
 #include "ext/matrix_clip_space.hpp"
 
 namespace FelicoEngine {

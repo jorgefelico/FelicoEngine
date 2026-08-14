@@ -1,4 +1,4 @@
-#include "Mesh.h"
+#include <FelicoEngine/Mesh.h>
 #include "glad/glad.h"
 
 namespace FelicoEngine {

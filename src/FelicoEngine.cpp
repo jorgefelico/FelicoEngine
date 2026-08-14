@@ -1,16 +1,10 @@
-#include "FelicoEngine.h"
-#include "Camera.h"
-#include "Mesh.h"
-#include "SDL2/SDL.h"
-#include "Shader.h"
-#include "Texture.h"
+#include "SDL2/SDL_events.h"
 #include "glad/glad.h"
+#include <FelicoEngine/FelicoEngine.h>
+#include <SDL2/SDL.h>
+
 namespace FelicoEngine {
-FelicoEngine::FelicoEngine(const char *title, int width, int height) {
-  m_Title = title;
-  m_Width = width;
-  m_Height = height;
-}
+FelicoEngine::FelicoEngine(const char *title) { m_Title = title; }
 
 void FelicoEngine::init() {
   if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -46,41 +40,29 @@ void FelicoEngine::init() {
   fprintf(stderr, "Viewport: 0,0 %dx%d\n", m_Width, m_Height);
 }
 
-void FelicoEngine::run() {
-  bool shouldClose = false;
-  Camera camera(m_Width, m_Height);
-  Shader shader("src/shaders/vert.glsl", "src/shaders/frag.glsl");
-  float quad[] = {// pos          color           UV
-                  250.0f, 150.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-                  550.0f, 150.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-                  550.0f, 450.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-                  250.0f, 150.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-                  550.0f, 450.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-                  250.0f, 450.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f};
-
-  Mesh mesh(quad, sizeof(quad) / sizeof(quad[0]));
-  Texture texture("src/textures/texture_01.png");
-  texture.bind(0);
-  while (!shouldClose) {
-    SDL_Event event;
-    while (SDL_PollEvent(&event)) {
-      if (event.type == SDL_QUIT)
-        shouldClose = true;
-    }
-
-    glClear(GL_COLOR_BUFFER_BIT);
-    shader.use();
-    shader.setMat4("u_projection", camera.getProjectionMatrix());
-    mesh.draw();
-    SDL_GL_SwapWindow(m_Window);
+void FelicoEngine::pollEvents() {
+  SDL_Event event;
+  while (SDL_PollEvent(&event)) {
+    if (event.type == SDL_QUIT)
+      m_ShouldClose = true;
   }
 }
+
+bool FelicoEngine::shouldClose() const { return m_ShouldClose; }
+
+void FelicoEngine::beginFrame() { glClear(GL_COLOR_BUFFER_BIT); }
+
+void FelicoEngine::endFrame() { SDL_GL_SwapWindow(m_Window); }
 
 void FelicoEngine::shutdown() {
   SDL_GL_DeleteContext(m_Context);
   SDL_DestroyWindow(m_Window);
   SDL_Quit();
 }
+
+int FelicoEngine::getWidth() const { return m_Width; }
+
+int FelicoEngine::getHeight() const { return m_Height; }
 
 FelicoEngine::~FelicoEngine() {}
 } // namespace FelicoEngine

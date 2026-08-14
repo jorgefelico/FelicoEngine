@@ -1,5 +1,5 @@
-#include "Shader.h"
-#include "Utils.h"
+#include <FelicoEngine/Shader.h>
+#include <FelicoEngine/Utils.h>
 #include "ext/matrix_float4x4.hpp"
 #include "glad/glad.h"
 #include <gtc/type_ptr.hpp>

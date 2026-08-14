@@ -38,23 +38,25 @@ find_package(OpenGL REQUIRED)
 # ------------------------------------------------------------------------------
 # Target Definition
 # ------------------------------------------------------------------------------
-
-add_executable(${PROJECT_NAME}
-    src/main.cpp
+add_library(FelicoEngine STATIC
     src/FelicoEngine.cpp
-    src/Shader.cpp
-    src/Mesh.cpp
-    src/Utils.cpp
-    src/Texture.cpp
     src/Camera.cpp
+    src/Mesh.cpp
+    src/Shader.cpp
+    src/Texture.cpp
+    src/Utils.cpp
+    src/Input.cpp
     vendor/glad/src/glad.c
-  )
-    
+)
+
+target_include_directories(${PROJECT_NAME} PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/glm
+)
+
 target_include_directories(${PROJECT_NAME} PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/glad/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/stb 
-    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/glm 
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/stb
 )
 
 # Link SDL2 and OpenGL
@@ -69,7 +71,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 # ------------------------------------------------------------------------------
 
 if(MSVC)
-    target_compile_options(${PROJECT_NAME} PRIVATE /W4 /permissive-)
+  target_compile_options(${PROJECT_NAME} PRIVATE /W4 /permissive-)
 else()
-    target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
+  target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
 endif()
