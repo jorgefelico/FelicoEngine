@@ -46,12 +46,13 @@ add_library(FelicoEngine STATIC
     src/Texture.cpp
     src/Utils.cpp
     src/Input.cpp
+    src/Sprite.cpp
     vendor/glad/src/glad.c
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/glm
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
