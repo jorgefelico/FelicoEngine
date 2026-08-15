@@ -1,15 +1,17 @@
 #define STB_IMAGE_IMPLEMENTATION
-#include <FelicoEngine/Texture.h>
 #include "glad/glad.h"
 #include "stb_image.h"
+#include <FelicoEngine/Texture.h>
 
 namespace FelicoEngine {
 Texture::Texture(const char *path) {
   stbi_set_flip_vertically_on_load(1);
   int width, height, channels;
   unsigned char *data = stbi_load(path, &width, &height, &channels, 4);
-  if (!data)
+  if (!data) {
+    printf("Could not load texture %s\n", path);
     return;
+  }
   glGenTextures(1, &m_ID);
   glBindTexture(GL_TEXTURE_2D, m_ID);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);

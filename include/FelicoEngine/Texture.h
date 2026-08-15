@@ -8,6 +8,6 @@ public:
   void bind(unsigned int slot = 0) const;
 
 private:
-  unsigned int m_ID;
+  unsigned int m_ID{0};
 };
 } // namespace FelicoEngine

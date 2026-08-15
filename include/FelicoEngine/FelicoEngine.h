@@ -16,6 +16,7 @@ public:
   void beginFrame();
   void endFrame();
   bool shouldClose() const;
+  float dt() const;
 
 private:
   int m_Width;
@@ -24,5 +25,7 @@ private:
   SDL_Window *m_Window;
   SDL_GLContext m_Context;
   bool m_ShouldClose = false;
+  float m_DeltaTime = 0.0f;
+  Uint32 m_LastTick = 0;
 };
 } // namespace FelicoEngine

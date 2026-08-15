@@ -2,6 +2,7 @@
 #include "glad/glad.h"
 #include <FelicoEngine/FelicoEngine.h>
 #include <SDL2/SDL.h>
+#include <cmath>
 
 namespace FelicoEngine {
 FelicoEngine::FelicoEngine(const char *title) { m_Title = title; }
@@ -38,6 +39,7 @@ void FelicoEngine::init() {
   }
   glViewport(0, 0, m_Width, m_Height);
   fprintf(stderr, "Viewport: 0,0 %dx%d\n", m_Width, m_Height);
+  m_LastTick = SDL_GetTicks();
 }
 
 void FelicoEngine::pollEvents() {
@@ -50,7 +52,13 @@ void FelicoEngine::pollEvents() {
 
 bool FelicoEngine::shouldClose() const { return m_ShouldClose; }
 
-void FelicoEngine::beginFrame() { glClear(GL_COLOR_BUFFER_BIT); }
+void FelicoEngine::beginFrame() {
+  Uint32 now = SDL_GetTicks();
+  m_DeltaTime = (now - m_LastTick) / 1000.0f;
+  m_LastTick = now;
+  m_DeltaTime = fminf(m_DeltaTime, 0.1f);
+  glClear(GL_COLOR_BUFFER_BIT);
+}
 
 void FelicoEngine::endFrame() { SDL_GL_SwapWindow(m_Window); }
 
@@ -64,5 +72,6 @@ int FelicoEngine::getWidth() const { return m_Width; }
 
 int FelicoEngine::getHeight() const { return m_Height; }
 
+float FelicoEngine::dt() const { return m_DeltaTime; }
 FelicoEngine::~FelicoEngine() {}
 } // namespace FelicoEngine
