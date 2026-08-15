@@ -9,10 +9,12 @@
 namespace FelicoEngine {
 
 Sprite::Sprite(const char *name, float x, float y, float width, float height,
-               const char *texturePath, Shader *shader, Camera *camera)
+               const char *texturePath, Shader *shader, Camera *camera,
+               Anchor anchor)
     : m_Name(name), m_Texture(texturePath), m_Shader(shader), m_Camera(camera) {
   m_Transform.position = {x, y};
   m_Transform.scale = {width, height};
+  m_Transform.anchor = anchor;
 }
 
 void Sprite::draw() {
@@ -22,6 +24,7 @@ void Sprite::draw() {
   m_Shader->use();
   m_Shader->setMat4("u_projection", m_Camera->getProjectionMatrix());
   m_Shader->setMat4("u_model", model);
+  m_Shader->setMat4("u_view", m_Camera->getViewMatrix());
   getMesh().draw();
 }
 

@@ -9,9 +9,11 @@ namespace FelicoEngine {
 class Sprite {
 public:
   Sprite(const char *name, float x, float y, float width, float height,
-         const char *texturePath, Shader *shader, Camera *camera);
+         const char *texturePath, Shader *shader, Camera *camera,
+         Anchor anchor);
   ~Sprite();
   void draw();
+  Transform &transform() { return m_Transform; };
 
 private:
   const char *m_Name;
