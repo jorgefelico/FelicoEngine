@@ -13,6 +13,14 @@ Camera::Camera(int width, int height) {
 }
 
 void Camera::setPosition(glm::vec2 pos) { m_Position = pos; }
+
+void Camera::resize(int width, int height) {
+  m_Width = width;
+  m_Height = height;
+  m_Projection =
+      glm::ortho(0.0f, (float)width, (float)height, 0.0f, -1.0f, 1.0f);
+}
+
 glm::mat4 Camera::getViewMatrix() {
   m_ViewMatrix =
       glm::translate(glm::mat4(1), {m_Width / 2.0f - m_Position.x,

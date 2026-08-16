@@ -8,6 +8,7 @@ public:
   glm::mat4 getProjectionMatrix();
   glm::mat4 getViewMatrix();
   void setPosition(glm::vec2 pos);
+  void resize(int width, int height);
 
 private:
   unsigned int m_Width;

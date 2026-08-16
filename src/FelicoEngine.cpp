@@ -7,10 +7,10 @@
 namespace FelicoEngine {
 FelicoEngine::FelicoEngine(const char *title) { m_Title = title; }
 
-void FelicoEngine::init() {
+bool FelicoEngine::init() {
   if (SDL_Init(SDL_INIT_VIDEO) != 0) {
     printf("Error initializing SDL: %s\n", SDL_GetError());
-    return;
+    return false;
   }
   printf("SDL Initialized\n");
 
@@ -24,22 +24,32 @@ void FelicoEngine::init() {
                                   SDL_WINDOW_FULLSCREEN_DESKTOP);
   if (!m_Window) {
     printf("Error creating window: %s\n", SDL_GetError());
-    return;
+    return false;
   }
 
   m_Context = SDL_GL_CreateContext(m_Window);
   if (!m_Context) {
     printf("Error creating GL context: %s\n", SDL_GetError());
-    return;
+    SDL_DestroyWindow(m_Window);
+    m_Window = nullptr;
+    return false;
   }
 
   if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress)) {
     printf("Failed to initialize GLAD\n");
-    return;
+    SDL_GL_DeleteContext(m_Context);
+    SDL_DestroyWindow(m_Window);
+    m_Context = nullptr;
+    m_Window = nullptr;
+    return false;
   }
+
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glViewport(0, 0, m_Width, m_Height);
   fprintf(stderr, "Viewport: 0,0 %dx%d\n", m_Width, m_Height);
   m_LastTick = SDL_GetTicks();
+  return true;
 }
 
 void FelicoEngine::pollEvents() {
@@ -47,6 +57,12 @@ void FelicoEngine::pollEvents() {
   while (SDL_PollEvent(&event)) {
     if (event.type == SDL_QUIT)
       m_ShouldClose = true;
+    else if (event.type == SDL_WINDOWEVENT &&
+             event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+      m_Width = event.window.data1;
+      m_Height = event.window.data2;
+      glViewport(0, 0, m_Width, m_Height);
+    }
   }
 }
 
@@ -63,8 +79,10 @@ void FelicoEngine::beginFrame() {
 void FelicoEngine::endFrame() { SDL_GL_SwapWindow(m_Window); }
 
 void FelicoEngine::shutdown() {
-  SDL_GL_DeleteContext(m_Context);
-  SDL_DestroyWindow(m_Window);
+  if (m_Context)
+    SDL_GL_DeleteContext(m_Context);
+  if (m_Window)
+    SDL_DestroyWindow(m_Window);
   SDL_Quit();
 }
 

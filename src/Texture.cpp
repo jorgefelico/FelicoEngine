@@ -9,7 +9,7 @@ Texture::Texture(const char *path) {
   int width, height, channels;
   unsigned char *data = stbi_load(path, &width, &height, &channels, 4);
   if (!data) {
-    printf("Could not load texture %s\n", path);
+    printf("Could not load texture %s: %s\n", path, stbi_failure_reason());
     return;
   }
   glGenTextures(1, &m_ID);

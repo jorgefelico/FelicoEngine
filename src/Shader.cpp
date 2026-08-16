@@ -4,6 +4,7 @@
 #include <FelicoEngine/Utils.h>
 #include <glm/gtc/type_ptr.hpp>
 #include <stdio.h>
+#include <cstdlib>
 
 namespace FelicoEngine {
 Shader::Shader(const char *vertPath, const char *fragPath) {
@@ -39,7 +40,9 @@ void Shader::createVertShader(const char *vertPath) {
     glGetShaderiv(m_vertShader, GL_INFO_LOG_LENGTH, &logLength);
     std::string log(logLength, 0);
     glGetShaderInfoLog(m_vertShader, logLength, nullptr, &log[0]);
-    printf("Vertex shader compile error:\n%s\n", log.c_str());
+    printf("Vertex shader compile error (%s):\n%s\n", vertPath,
+           log.c_str());
+    std::exit(EXIT_FAILURE);
   }
 }
 
@@ -57,7 +60,9 @@ void Shader::createFragShader(const char *fragPath) {
     glGetShaderiv(m_fragShader, GL_INFO_LOG_LENGTH, &logLength);
     std::string log(logLength, 0);
     glGetShaderInfoLog(m_fragShader, logLength, nullptr, &log[0]);
-    printf("Fragment shader compile error:\n%s\n", log.c_str());
+    printf("Fragment shader compile error (%s):\n%s\n", fragPath,
+           log.c_str());
+    std::exit(EXIT_FAILURE);
   }
 }
 
@@ -75,6 +80,7 @@ void Shader::createProgram() {
     std::string log(logLength, 0);
     glGetProgramInfoLog(shaderProgram, logLength, nullptr, &log[0]);
     printf("Shader program link error:\n%s\n", log.c_str());
+    std::exit(EXIT_FAILURE);
   }
   m_ID = shaderProgram;
 }
