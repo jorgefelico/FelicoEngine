@@ -10,6 +10,7 @@ public:
 
   void use() const;
   void setMat4(const char *name, glm::mat4 value);
+  void setVec4(const char *name, glm::vec4 value);
 
 private:
   unsigned int m_ID;

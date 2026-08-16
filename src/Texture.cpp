@@ -6,8 +6,8 @@
 namespace FelicoEngine {
 Texture::Texture(const char *path) {
   stbi_set_flip_vertically_on_load(1);
-  int width, height, channels;
-  unsigned char *data = stbi_load(path, &width, &height, &channels, 4);
+  int channels;
+  unsigned char *data = stbi_load(path, &m_Width, &m_Height, &channels, 4);
   if (!data) {
     printf("Could not load texture %s: %s\n", path, stbi_failure_reason());
     return;
@@ -20,7 +20,7 @@ Texture::Texture(const char *path) {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
                   GL_LINEAR_MIPMAP_LINEAR);
 
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_Width, m_Height, 0, GL_RGBA,
                GL_UNSIGNED_BYTE, data);
   glGenerateMipmap(GL_TEXTURE_2D);
   stbi_image_free(data);
@@ -32,4 +32,8 @@ void Texture::bind(unsigned int slot) const {
   glActiveTexture(GL_TEXTURE0 + slot);
   glBindTexture(GL_TEXTURE_2D, m_ID);
 }
+
+int Texture::width() const { return m_Width; }
+
+int Texture::height() const { return m_Height; }
 } // namespace FelicoEngine

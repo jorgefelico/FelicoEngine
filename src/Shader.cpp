@@ -2,9 +2,9 @@
 #include "glm/ext/matrix_float4x4.hpp"
 #include <FelicoEngine/Shader.h>
 #include <FelicoEngine/Utils.h>
+#include <cstdlib>
 #include <glm/gtc/type_ptr.hpp>
 #include <stdio.h>
-#include <cstdlib>
 
 namespace FelicoEngine {
 Shader::Shader(const char *vertPath, const char *fragPath) {
@@ -26,6 +26,11 @@ void Shader::setMat4(const char *name, glm::mat4 value) {
   glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(value));
 }
 
+void Shader::setVec4(const char *name, glm::vec4 value) {
+  GLuint loc = glGetUniformLocation(m_ID, name);
+  glUniform4fv(loc, 1, glm::value_ptr(value));
+}
+
 void Shader::createVertShader(const char *vertPath) {
   GLint success;
   // Vert Shader
@@ -40,8 +45,7 @@ void Shader::createVertShader(const char *vertPath) {
     glGetShaderiv(m_vertShader, GL_INFO_LOG_LENGTH, &logLength);
     std::string log(logLength, 0);
     glGetShaderInfoLog(m_vertShader, logLength, nullptr, &log[0]);
-    printf("Vertex shader compile error (%s):\n%s\n", vertPath,
-           log.c_str());
+    printf("Vertex shader compile error (%s):\n%s\n", vertPath, log.c_str());
     std::exit(EXIT_FAILURE);
   }
 }
@@ -60,8 +64,7 @@ void Shader::createFragShader(const char *fragPath) {
     glGetShaderiv(m_fragShader, GL_INFO_LOG_LENGTH, &logLength);
     std::string log(logLength, 0);
     glGetShaderInfoLog(m_fragShader, logLength, nullptr, &log[0]);
-    printf("Fragment shader compile error (%s):\n%s\n", fragPath,
-           log.c_str());
+    printf("Fragment shader compile error (%s):\n%s\n", fragPath, log.c_str());
     std::exit(EXIT_FAILURE);
   }
 }

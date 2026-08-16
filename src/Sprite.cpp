@@ -25,6 +25,7 @@ void Sprite::draw() {
   m_Shader->setMat4("u_projection", m_Camera->getProjectionMatrix());
   m_Shader->setMat4("u_model", model);
   m_Shader->setMat4("u_view", m_Camera->getViewMatrix());
+  m_Shader->setVec4("u_uvRect", m_UvRect);
   getMesh().draw();
 }
 
@@ -54,6 +55,14 @@ glm::mat4 Sprite::buildModelMatrix() {
       glm::translate(glm::mat4(1), {anchor.x, anchor.y, 0});
 
   return matrix;
+}
+
+void Sprite::setUvRect(float x, float y, float width, float height) {
+  int W = m_Texture.width();
+  int H = m_Texture.height();
+  if (W == 0 || H == 0)
+    return;
+  m_UvRect = {x / W, 1.0f - (y + height) / H, width / W, height / H};
 }
 
 Sprite::~Sprite() {}
