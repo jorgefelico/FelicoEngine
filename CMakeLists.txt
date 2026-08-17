@@ -47,6 +47,7 @@ add_library(FelicoEngine STATIC
     src/Utils.cpp
     src/Input.cpp
     src/Sprite.cpp
+    src/Atlas.cpp
     vendor/glad/src/glad.c
 )
 

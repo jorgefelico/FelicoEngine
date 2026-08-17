@@ -9,16 +9,16 @@
 namespace FelicoEngine {
 
 Sprite::Sprite(const char *name, float x, float y, float width, float height,
-               const char *texturePath, Shader *shader, Camera *camera,
+               Atlas *atlas, Shader *shader, Camera *camera,
                Anchor anchor)
-    : m_Name(name), m_Texture(texturePath), m_Shader(shader), m_Camera(camera) {
+    : m_Name(name), m_Atlas(atlas), m_Shader(shader), m_Camera(camera) {
   m_Transform.position = {x, y};
   m_Transform.scale = {width, height};
   m_Transform.anchor = anchor;
 }
 
 void Sprite::draw() {
-  m_Texture.bind(0);
+  m_Atlas->getTexture().bind(0);
 
   glm::mat4 model = buildModelMatrix();
   m_Shader->use();
@@ -58,12 +58,21 @@ glm::mat4 Sprite::buildModelMatrix() {
 }
 
 void Sprite::setUvRect(float x, float y, float width, float height) {
-  int W = m_Texture.width();
-  int H = m_Texture.height();
+  int W = m_Atlas->getTexture().width();
+  int H = m_Atlas->getTexture().height();
   if (W == 0 || H == 0)
     return;
   m_UvRect = {x / W, 1.0f - (y + height) / H, width / W, height / H};
 }
+void Sprite::setFrame(int index) {
+  AtlasRect rect = m_Atlas->getFrame(index);
+  setUvRect(rect.x, rect.y, rect.w, rect.h);
+};
+
+void Sprite::setRegion(const char *name) {
+  AtlasRect rect = m_Atlas->getRegion(name);
+  setUvRect(rect.x, rect.y, rect.w, rect.h);
+};
 
 Sprite::~Sprite() {}
 } // namespace FelicoEngine
