@@ -27,7 +27,14 @@ FetchContent_Declare(
     GIT_SHALLOW    TRUE              # Downloads only the tag history for fast cloning
 )
 
+FetchContent_Declare(
+  JSON
+  GIT_REPOSITORY https://github.com/nlohmann/json
+  GIT_TAG        v3.12.0
+  GIT_SHALLOW    true
+)
 FetchContent_MakeAvailable(SDL2)
+FetchContent_MakeAvailable(JSON)
 
 # ------------------------------------------------------------------------------
 # Dependencies
@@ -66,6 +73,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     OpenGL::GL
     $<IF:$<TARGET_EXISTS:SDL2::SDL2-static>,SDL2::SDL2-static,SDL2::SDL2>
     $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
+    nlohmann_json::nlohmann_json
 )
 
 # ------------------------------------------------------------------------------

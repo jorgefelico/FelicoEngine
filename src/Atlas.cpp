@@ -1,6 +1,9 @@
 #include "FelicoEngine/Texture.h"
+#include "nlohmann/json_fwd.hpp"
 #include <FelicoEngine/Atlas.h>
+#include <FelicoEngine/Utils.h>
 #include <cstdio>
+#include <nlohmann/json.hpp>
 
 namespace FelicoEngine {
 Atlas::Atlas(const char *texturePath) : m_AtlasTexture(texturePath) {};
@@ -39,5 +42,24 @@ AtlasRect Atlas::getFrame(int index) const {
   float x = column * colWidth;
   float y = row * rowHeight;
   return AtlasRect{x, y, colWidth, rowHeight};
+};
+
+void Atlas::loadRegions(const char *jsonPath) {
+  std::string content = Utils::readFile(jsonPath);
+  try {
+    nlohmann::json j = nlohmann::json::parse(content);
+    for (auto it = j.begin(); it != j.end(); ++it) {
+      const auto &entry = it.value();
+      if (entry.contains("rotated") && entry["rotated"].get<bool>()) {
+        printf("Region %s is rotated; not supported\n", it.key().c_str());
+      }
+      const auto &frame = entry["frame"];
+      createRegion(it.key().c_str(),
+                   AtlasRect{frame["x"].get<float>(), frame["y"].get<float>(),
+                             frame["w"].get<float>(), frame["h"].get<float>()});
+    }
+  } catch (const nlohmann::json::exception &e) {
+    printf("Could not parse regions file %s: %s\n", jsonPath, e.what());
+  }
 };
 } // namespace FelicoEngine

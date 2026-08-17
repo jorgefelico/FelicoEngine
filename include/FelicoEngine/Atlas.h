@@ -20,6 +20,7 @@ public:
   AtlasRect getRegion(const char *name) const;
   AtlasRect getFrame(int index) const;
   void createRegion(const char *name, AtlasRect region);
+  void loadRegions(const char *jsonPath);
 
 private:
   int m_Cols{0};
